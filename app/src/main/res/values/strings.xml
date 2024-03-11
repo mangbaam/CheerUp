@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">CheerUp</string>
+
+    <string name="neon">네온 사인</string>
+    <string name="light">후레시</string>
+    <string name="settings">설정</string>
 </resources>

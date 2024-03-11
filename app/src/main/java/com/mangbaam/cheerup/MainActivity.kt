@@ -39,6 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mangbaam.cheerup.FlowDirection.*
+import com.mangbaam.cheerup.screen.Main
 import com.mangbaam.cheerup.ui.theme.CheerUpTheme
 
 class MainActivity : ComponentActivity() {
@@ -48,7 +49,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             CheerUpTheme {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    Column {
+                    Main()
+                    /*Column {
                         val focusRequester = remember {
                             FocusRequester()
                         }
@@ -99,7 +101,7 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.padding(top = 20.dp, start = 16.dp),
                             label = "색상",
                         )
-                    }
+                    }*/
                 }
             }
         }
