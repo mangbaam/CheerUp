@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.mangbaam.cheerup.R
+import com.mangbaam.cheerup.screen.home.Menu
 import kotlinx.coroutines.launch
 
 @Composable
@@ -69,9 +70,9 @@ fun MainDrawer(
                     style = MaterialTheme.typography.labelMedium
                 )
             },
-            selected = currentMenu == Menu.Light,
+            selected = currentMenu == Menu.FlashLight,
             onClick = {
-                onClickMenu(Menu.Light)
+                onClickMenu(Menu.FlashLight)
                 scope.launch { drawerState.close() }
             }
         )
