@@ -1,4 +1,4 @@
-package com.mangbaam.cheerup.screen.light
+package com.mangbaam.cheerup.screen.settings
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,10 +9,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun FlashLightScreen(
+fun Settings(
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = "Light Screen", style = MaterialTheme.typography.bodyLarge)
+        Text(text = "Settings Screen", style = MaterialTheme.typography.bodyLarge)
     }
 }

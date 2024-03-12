@@ -10,6 +10,7 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.NavigationDrawerItem
@@ -32,6 +33,7 @@ fun MainDrawer(
     modifier: Modifier = Modifier,
     currentMenu: Menu = Menu.Neon,
     onClickMenu: (Menu) -> Unit,
+    onClickSettings: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
 
@@ -47,7 +49,7 @@ fun MainDrawer(
             modifier = Modifier.padding(bottom = 24.dp)
         )
         NavigationDrawerItem(
-            icon = { Icons.Outlined.Favorite },
+            icon = { Icon(imageVector = Icons.Outlined.Favorite, contentDescription = null) },
             label = {
                 Text(
                     modifier = Modifier.padding(horizontal = 16.dp),
@@ -62,11 +64,11 @@ fun MainDrawer(
             },
         )
         NavigationDrawerItem(
-            icon = { Icons.Outlined.Star },
+            icon = { Icon(imageVector = Icons.Outlined.Star, contentDescription = null) },
             label = {
                 Text(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    text = stringResource(R.string.light),
+                    text = stringResource(R.string.flash_light),
                     style = MaterialTheme.typography.labelMedium
                 )
             },
@@ -78,7 +80,7 @@ fun MainDrawer(
         )
         Spacer(modifier = Modifier.weight(1f))
         NavigationDrawerItem(
-            icon = { Icons.Outlined.Settings },
+            icon = { Icon(imageVector = Icons.Outlined.Settings, contentDescription = null) },
             label = {
                 Text(
                     modifier = Modifier.padding(horizontal = 16.dp),
@@ -88,6 +90,7 @@ fun MainDrawer(
             },
             selected = false,
             onClick = {
+                onClickSettings()
                 scope.launch { drawerState.close() }
             },
         )

@@ -5,5 +5,9 @@ import com.mangbaam.cheerup.screen.home.Home
 
 @Composable
 fun Main() {
-    Home()
+    Home(
+        onClickSettings = {
+            // todo move to settings
+        }
+    )
 }
