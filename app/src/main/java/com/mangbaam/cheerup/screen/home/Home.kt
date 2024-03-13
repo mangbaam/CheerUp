@@ -15,51 +15,70 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.mangbaam.cheerup.R
 import com.mangbaam.cheerup.screen.MainDrawer
+import com.mangbaam.cheerup.screen.flash.FlashRoute
 import com.mangbaam.cheerup.screen.flash.FlashScreen
-import com.mangbaam.cheerup.screen.home.Menu.Flash
-import com.mangbaam.cheerup.screen.home.Menu.Neon
+import com.mangbaam.cheerup.screen.neon.NeonRoute
 import com.mangbaam.cheerup.screen.neon.NeonScreen
 import kotlinx.coroutines.launch
+
+const val HomeRoute = "home"
 
 @Composable
 fun Home(
     onClickSettings: () -> Unit,
 ) {
+    val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-    var currentMenu by rememberSaveable { mutableStateOf(Neon) }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             MainDrawer(
                 drawerState = drawerState,
-                currentMenu = currentMenu,
-                onClickMenu = { menu -> currentMenu = menu },
+                currentMenu = currentDestination?.route ?: NeonRoute,
+                onClickMenu = { route ->
+                    navController.navigate(route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
                 onClickSettings = onClickSettings,
             )
         }
     ) {
         Scaffold(
             topBar = {
-                HomeAppbar(currentMenu) {
+                HomeAppbar(currentDestination?.route ?: NeonRoute) {
                     scope.launch {
                         if (drawerState.isOpen) drawerState.close() else drawerState.open()
                     }
                 }
             }
         ) { innerPadding ->
-            when (currentMenu) {
-                Neon -> NeonScreen(Modifier.padding(innerPadding))
-                Flash -> FlashScreen(Modifier.padding(innerPadding))
+            NavHost(navController = navController, startDestination = NeonRoute) {
+                composable(NeonRoute) {
+                    NeonScreen(Modifier.padding(innerPadding))
+                }
+                composable(FlashRoute) {
+                    FlashScreen(Modifier.padding(innerPadding))
+                }
             }
         }
     }
@@ -68,14 +87,15 @@ fun Home(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HomeAppbar(
-    currentMenu: Menu = Neon,
+    currentMenu: String = NeonRoute,
     onClick: () -> Unit,
 ) {
     TopAppBar(
         title = {
             val title = when (currentMenu) {
-                Neon -> stringResource(R.string.neon)
-                Flash -> stringResource(R.string.flash_light)
+                NeonRoute -> stringResource(R.string.neon)
+                FlashRoute -> stringResource(R.string.flash)
+                else -> ""
             }
             Text(text = title, style = MaterialTheme.typography.titleMedium)
         },

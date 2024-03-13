@@ -2,8 +2,9 @@
     <string name="app_name">CheerUp</string>
 
     <string name="neon">네온 사인</string>
-    <string name="flash_light">후레시</string>
+    <string name="flash">후레시</string>
     <string name="settings">설정</string>
 
     <string name="navigation_icon_description">내비게이션 아이콘</string>
+    <string name="navigate_back_description">뒤로 가기</string>
 </resources>

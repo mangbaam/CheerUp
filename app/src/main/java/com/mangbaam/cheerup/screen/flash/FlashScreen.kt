@@ -50,6 +50,9 @@ import kotlinx.coroutines.launch
 // TODO 후레시 화면 다크모드
 // TODO 후레시 스위치 커스텀
 // TODO 후레시 이펙트 (강도 변경) <- API13 이상 가능
+
+const val FlashRoute = "flash"
+
 @Composable
 fun FlashScreen(
     modifier: Modifier = Modifier,

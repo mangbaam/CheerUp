@@ -24,15 +24,16 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.mangbaam.cheerup.R
-import com.mangbaam.cheerup.screen.home.Menu
+import com.mangbaam.cheerup.screen.flash.FlashRoute
+import com.mangbaam.cheerup.screen.neon.NeonRoute
 import kotlinx.coroutines.launch
 
 @Composable
 fun MainDrawer(
     drawerState: DrawerState,
     modifier: Modifier = Modifier,
-    currentMenu: Menu = Menu.Neon,
-    onClickMenu: (Menu) -> Unit,
+    currentMenu: String,
+    onClickMenu: (route: String) -> Unit,
     onClickSettings: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
@@ -57,9 +58,9 @@ fun MainDrawer(
                     style = MaterialTheme.typography.labelMedium
                 )
             },
-            selected = currentMenu == Menu.Neon,
+            selected = currentMenu == NeonRoute,
             onClick = {
-                onClickMenu(Menu.Neon)
+                onClickMenu(NeonRoute)
                 scope.launch { drawerState.close() }
             },
         )
@@ -68,13 +69,13 @@ fun MainDrawer(
             label = {
                 Text(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    text = stringResource(R.string.flash_light),
+                    text = stringResource(R.string.flash),
                     style = MaterialTheme.typography.labelMedium
                 )
             },
-            selected = currentMenu == Menu.Flash,
+            selected = currentMenu == FlashRoute,
             onClick = {
-                onClickMenu(Menu.Flash)
+                onClickMenu(FlashRoute)
                 scope.launch { drawerState.close() }
             }
         )

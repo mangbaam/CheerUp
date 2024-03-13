@@ -8,6 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
+const val NeonRoute = "neon"
+
 @Composable
 fun NeonScreen(
     modifier: Modifier = Modifier,
