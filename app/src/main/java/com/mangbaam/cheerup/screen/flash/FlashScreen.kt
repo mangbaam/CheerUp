@@ -1,4 +1,4 @@
-package com.mangbaam.cheerup.screen.flashlight
+package com.mangbaam.cheerup.screen.flash
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
@@ -43,21 +43,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.mangbaam.cheerup.screen.flashlight.TorchEffect.Blink
-import com.mangbaam.cheerup.screen.flashlight.TorchEffect.None
+import com.mangbaam.cheerup.screen.flash.FlashEffect.Blink
+import com.mangbaam.cheerup.screen.flash.FlashEffect.None
 import kotlinx.coroutines.launch
 
 // TODO 후레시 화면 다크모드
 // TODO 후레시 스위치 커스텀
 // TODO 후레시 이펙트 (강도 변경) <- API13 이상 가능
 @Composable
-fun FlashLightScreen(
+fun FlashScreen(
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
     val cameraId: String? = cameraManager.cameraIdList.firstOrNull()
-    val torchMaxLevel = cameraId?.let {
+    val flashMaxLevel = cameraId?.let {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             cameraManager.getCameraCharacteristics(it).get(CameraCharacteristics.FLASH_INFO_STRENGTH_MAXIMUM_LEVEL)
         } else {
@@ -67,13 +67,13 @@ fun FlashLightScreen(
 
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
-    val hasFlashLight = cameraId != null && context.hasFlashLight
+    val hasFlash = cameraId != null && context.hasFlash
     var flash: Boolean by remember { mutableStateOf(false) }
 
-    var torchLevel by remember { mutableIntStateOf(torchMaxLevel) }
+    var flashLevel by remember { mutableIntStateOf(flashMaxLevel) }
 
-    val torchBlinkAnimator = remember {
-        ValueAnimator.ofInt(1, torchLevel).apply {
+    val flashBlinkAnimator = remember {
+        ValueAnimator.ofInt(1, flashLevel).apply {
             duration = 300
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ValueAnimator.REVERSE
@@ -81,11 +81,11 @@ fun FlashLightScreen(
     }
 
     var showOption: Boolean by remember { mutableStateOf(false) }
-    var torchEffect: TorchEffect by remember { mutableStateOf(None) }
+    var flashEffect: FlashEffect by remember { mutableStateOf(None) }
 
-    LaunchedEffect(hasFlashLight) {
+    LaunchedEffect(hasFlash) {
         scope.launch {
-            if (!hasFlashLight) {
+            if (!hasFlash) {
                 snackbarHostState.showSnackbar("후레시가 존재하지 않습니다", duration = SnackbarDuration.Indefinite)
             } else {
                 snackbarHostState.currentSnackbarData?.dismiss()
@@ -93,15 +93,15 @@ fun FlashLightScreen(
         }
     }
 
-    LaunchedEffect(flash, torchEffect, torchLevel) {
-        if (!hasFlashLight) return@LaunchedEffect
+    LaunchedEffect(flash, flashEffect, flashLevel) {
+        if (!hasFlash) return@LaunchedEffect
         cameraId?.let { id ->
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 if (flash) {
-                    when (torchEffect) {
+                    when (flashEffect) {
                         None -> {
-                            torchBlinkAnimator.removeAllUpdateListeners()
-                            cameraManager.turnOnTorchWithStrengthLevel(id, torchLevel)
+                            flashBlinkAnimator.removeAllUpdateListeners()
+                            cameraManager.turnOnTorchWithStrengthLevel(id, flashLevel)
                             cameraManager.registerTorchCallback(object : CameraManager.TorchCallback() {
                                 override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
                                     super.onTorchModeChanged(cameraId, enabled)
@@ -111,14 +111,14 @@ fun FlashLightScreen(
                         }
 
                         Blink -> {
-                            torchBlinkAnimator.addUpdateListener { level ->
+                            flashBlinkAnimator.addUpdateListener { level ->
                                 cameraManager.turnOnTorchWithStrengthLevel(id, level.animatedValue as Int)
                             }
-                            torchBlinkAnimator.start()
+                            flashBlinkAnimator.start()
                         }
                     }
                 } else {
-                    torchBlinkAnimator.removeAllUpdateListeners()
+                    flashBlinkAnimator.removeAllUpdateListeners()
                     cameraManager.setTorchMode(id, false)
                 }
             } else {
@@ -141,9 +141,9 @@ fun FlashLightScreen(
                 Switch(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     checked = flash,
-                    enabled = hasFlashLight,
+                    enabled = hasFlash,
                     onCheckedChange = {
-                        flash = it && hasFlashLight
+                        flash = it && hasFlash
                     },
                 )
 
@@ -176,31 +176,31 @@ fun FlashLightScreen(
                             Text(text = "밝기", style = MaterialTheme.typography.bodyLarge)
 
                             Slider(
-                                value = torchLevel.toFloat(),
-                                onValueChange = { torchLevel = it.toInt() },
-                                valueRange = 1f..torchMaxLevel.toFloat(),
+                                value = flashLevel.toFloat(),
+                                onValueChange = { flashLevel = it.toInt() },
+                                valueRange = 1f..flashMaxLevel.toFloat(),
                                 steps = 1,
                             )
 
                             Text(text = "효과", style = MaterialTheme.typography.bodyLarge)
                             Row(
-                                modifier = Modifier.clickable { torchEffect = None },
+                                modifier = Modifier.clickable { flashEffect = None },
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(text = "없음")
                                 RadioButton(
-                                    selected = torchEffect == None,
-                                    onClick = { torchEffect = None },
+                                    selected = flashEffect == None,
+                                    onClick = { flashEffect = None },
                                 )
                             }
                             Row(
-                                modifier = Modifier.clickable { torchEffect = Blink },
+                                modifier = Modifier.clickable { flashEffect = Blink },
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(text = "깜빡임")
                                 RadioButton(
-                                    selected = torchEffect == Blink,
-                                    onClick = { torchEffect = Blink },
+                                    selected = flashEffect == Blink,
+                                    onClick = { flashEffect = Blink },
                                 )
                             }
                         }
@@ -211,9 +211,9 @@ fun FlashLightScreen(
     }
 }
 
-private val Context.hasFlashLight: Boolean
+private val Context.hasFlash: Boolean
     get() = packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)
 
-private enum class TorchEffect {
+private enum class FlashEffect {
     None, Blink
 }

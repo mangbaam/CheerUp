@@ -72,9 +72,9 @@ fun MainDrawer(
                     style = MaterialTheme.typography.labelMedium
                 )
             },
-            selected = currentMenu == Menu.FlashLight,
+            selected = currentMenu == Menu.Flash,
             onClick = {
-                onClickMenu(Menu.FlashLight)
+                onClickMenu(Menu.Flash)
                 scope.launch { drawerState.close() }
             }
         )

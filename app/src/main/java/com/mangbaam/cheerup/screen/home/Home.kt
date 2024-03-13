@@ -23,8 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.mangbaam.cheerup.R
 import com.mangbaam.cheerup.screen.MainDrawer
-import com.mangbaam.cheerup.screen.flashlight.FlashLightScreen
-import com.mangbaam.cheerup.screen.home.Menu.FlashLight
+import com.mangbaam.cheerup.screen.flash.FlashScreen
+import com.mangbaam.cheerup.screen.home.Menu.Flash
 import com.mangbaam.cheerup.screen.home.Menu.Neon
 import com.mangbaam.cheerup.screen.neon.NeonScreen
 import kotlinx.coroutines.launch
@@ -59,7 +59,7 @@ fun Home(
         ) { innerPadding ->
             when (currentMenu) {
                 Neon -> NeonScreen(Modifier.padding(innerPadding))
-                FlashLight -> FlashLightScreen(Modifier.padding(innerPadding))
+                Flash -> FlashScreen(Modifier.padding(innerPadding))
             }
         }
     }
@@ -75,7 +75,7 @@ private fun HomeAppbar(
         title = {
             val title = when (currentMenu) {
                 Neon -> stringResource(R.string.neon)
-                FlashLight -> stringResource(R.string.flash_light)
+                Flash -> stringResource(R.string.flash_light)
             }
             Text(text = title, style = MaterialTheme.typography.titleMedium)
         },

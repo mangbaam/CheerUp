@@ -1,5 +1,5 @@
 package com.mangbaam.cheerup.screen.home
 
 enum class Menu {
-    Neon, FlashLight
+    Neon, Flash
 }
