@@ -2,6 +2,7 @@ package com.mangbaam.cheerup.screen.neon
 
 import androidx.compose.foundation.DefaultMarqueeVelocity
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.MarqueeAnimationMode
 import androidx.compose.foundation.MarqueeSpacing
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
@@ -61,7 +62,9 @@ fun Neon(
                     initialDelayMillis = 100,
                     delayMillis = 0,
                     spacing = MarqueeSpacing(10.dp),
-                    velocity = velocity,
+                    velocity = -velocity,
+                    animationMode = MarqueeAnimationMode.Immediately,
+                    iterations = Int.MAX_VALUE,
                 ),
         ) {
             Text(

@@ -1,5 +1,7 @@
 package com.mangbaam.cheerup.screen.neon
 
+import androidx.compose.foundation.DefaultMarqueeVelocity
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,13 +26,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.mangbaam.cheerup.util.dpToPx
 
 const val NeonRoute = "neon"
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NeonScreen(
     modifier: Modifier = Modifier,
@@ -39,6 +44,7 @@ fun NeonScreen(
     var displayText: String by remember { mutableStateOf("") }
     var textSize: TextUnit by remember { mutableStateOf(32.sp) }
     var fontWeight: Int by remember { mutableIntStateOf(FontWeight.Normal.weight) }
+    var speed: Dp by remember { mutableStateOf(DefaultMarqueeVelocity) }
 
     Scaffold { innerPadding ->
         Column(modifier) {
@@ -47,6 +53,7 @@ fun NeonScreen(
                 displayText = displayText,
                 fontSize = textSize,
                 fontWeight = fontWeight,
+                velocity = speed,
             )
             Column(
                 modifier = Modifier.verticalScroll(scrollState),
@@ -66,6 +73,21 @@ fun NeonScreen(
                         }
                     }
                 )
+                Row(
+                    modifier = Modifier.padding(top = 24.dp, start = 16.dp, end = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(text = "속도")
+                    Slider(
+                        modifier = Modifier.padding(start = 8.dp),
+                        value = speed.value,
+                        valueRange = -100.dp.dpToPx()..100.dp.dpToPx(),
+                        onValueChange = {
+                            speed = it.dp
+                        },
+                    )
+                }
+
                 Row(
                     modifier = Modifier.padding(top = 24.dp, start = 16.dp, end = 16.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -90,7 +112,6 @@ fun NeonScreen(
                         modifier = Modifier.padding(start = 8.dp),
                         value = fontWeight.toFloat(),
                         valueRange = FontWeight.Thin.weight.toFloat()..FontWeight.ExtraBold.weight.toFloat(),
-                        steps = 1,
                         onValueChange = {
                             fontWeight = it.toInt()
                         },
