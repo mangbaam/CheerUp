@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.mangbaam.cheerup.util.dpToPx
 
 const val NeonRoute = "neon"
@@ -39,6 +40,7 @@ const val NeonRoute = "neon"
 @Composable
 fun NeonScreen(
     modifier: Modifier = Modifier,
+    viewModel: NeonViewModel = hiltViewModel(),
 ) {
     val scrollState = rememberScrollState()
     var displayText: String by remember { mutableStateOf("") }
