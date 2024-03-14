@@ -1,5 +1,6 @@
 package com.mangbaam.cheerup.screen.neon
 
+import androidx.compose.foundation.DefaultMarqueeVelocity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.MarqueeSpacing
 import androidx.compose.foundation.background
@@ -20,6 +21,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mangbaam.cheerup.util.component1
@@ -32,6 +36,10 @@ import com.mangbaam.cheerup.util.screenSize
 fun Neon(
     displayText: String,
     modifier: Modifier = Modifier,
+    fontSize: TextUnit = 32.sp,
+    fontWeight: Int = FontWeight.Normal.weight,
+    textColor: Color = Color.Red,
+    velocity: Dp = DefaultMarqueeVelocity,
 ) {
     val (width, height) = screenSize
     var neonWidth by remember { mutableIntStateOf(0) }
@@ -53,6 +61,7 @@ fun Neon(
                     initialDelayMillis = 100,
                     delayMillis = 0,
                     spacing = MarqueeSpacing(10.dp),
+                    velocity = velocity,
                 ),
         ) {
             Text(
@@ -61,8 +70,9 @@ fun Neon(
                         textWidth = coordinates.size.width
                     },
                 text = displayText,
-                fontSize = 32.sp,
-                color = Color.Red,
+                fontSize = fontSize,
+                fontWeight = FontWeight(fontWeight),
+                color = textColor,
             )
             Spacer(modifier = Modifier.width(neonWidth.pxToDp() - textWidth.pxToDp() + 10.dp))
         }
