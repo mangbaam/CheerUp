@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -56,7 +57,9 @@ fun ColorPickerBottomSheet(
         modifier = modifier,
         onDismissRequest = onDismiss,
     ) {
-        Column {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
             HorizontalPager(
                 state = pagerState,
             ) { page ->
@@ -70,6 +73,13 @@ fun ColorPickerBottomSheet(
                 }
             }
             // 인디케이터
+            SlidingLinePagerIndicator(
+                modifier = Modifier.padding(vertical = 16.dp),
+                count = 5,
+                pagerState = pagerState,
+                activeColor = MaterialTheme.colorScheme.primary,
+                inactiveColor = MaterialTheme.colorScheme.inversePrimary,
+            )
         }
     }
 }
