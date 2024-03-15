@@ -54,7 +54,9 @@ fun ColorPickerBottomSheet(
     onDismiss: () -> Unit,
 ) {
     val pagerState = rememberPagerState(
-        initialPage = 1, // TODO 현재 선택된 색상이 있는 페이지로 이동
+        initialPage = colorPreset
+            .indexOfFirst { it.contains(currentColor) }
+            .coerceAtLeast(1),
         pageCount = { 5 },
     )
     ModalBottomSheet(
