@@ -1,7 +1,6 @@
 package com.mangbaam.cheerup.component
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
@@ -14,14 +13,13 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun CircleColorButton(
+    modifier: Modifier = Modifier,
     color: Long,
-    size: Dp = 20.dp,
+    size: Dp = 28.dp,
     onClick: () -> Unit,
 ) {
     Button(
-        modifier = Modifier
-            .padding(start = 8.dp)
-            .size(size),
+        modifier = modifier.size(size),
         onClick = onClick,
         contentPadding = PaddingValues(0.dp),
         shape = CircleShape,

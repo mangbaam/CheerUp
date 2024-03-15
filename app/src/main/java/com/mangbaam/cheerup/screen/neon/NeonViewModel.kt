@@ -27,4 +27,12 @@ class NeonViewModel @Inject constructor() : ViewModel() {
     fun changeFontWeight(weight: Int) {
         _state.update { it.copy(fontWeight = weight) }
     }
+
+    fun changeTextColor(color: Long) {
+        _state.update { it.copy(textColor = color) }
+    }
+
+    fun changeBgColor(color: Long) {
+        // TODO 배경 색상 변경
+    }
 }

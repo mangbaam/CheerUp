@@ -45,7 +45,9 @@ fun NeonScreen(
 ) {
     val scrollState = rememberScrollState()
     val state by viewModel.state.collectAsStateWithLifecycle()
-    var showColorPicker by remember { mutableStateOf(false) }
+
+    var selectedTextColor by remember { mutableStateOf<Long?>(null) }
+    var selectedBgColor by remember { mutableStateOf<Long?>(null) }
 
     Scaffold { innerPadding ->
         Column(modifier) {
@@ -63,7 +65,7 @@ fun NeonScreen(
                 OutlinedTextField(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 64.dp, start = 16.dp, end = 16.dp),
+                        .padding(top = 32.dp, start = 16.dp, end = 16.dp),
                     value = state.displayText,
                     placeholder = { Text(text = "응원 문구를 입력하세요", style = MaterialTheme.typography.bodyMedium) },
                     onValueChange = viewModel::changeDisplayText,
@@ -126,12 +128,16 @@ fun NeonScreen(
                 ) {
                     Color.Red
                     Text(text = "글자 색상")
-                    CircleColorButton(color = state.textColor) { showColorPicker = true }
+                    CircleColorButton(
+                        modifier = Modifier.padding(start = 8.dp),
+                        color = state.textColor,
+                        onClick = { selectedTextColor = state.textColor },
+                    )
                 }
             }
         }
 
-        if (showColorPicker) {
+        if (selectedTextColor != null || selectedBgColor != null) {
             ColorPickerBottomSheet(
                 modifier = Modifier
                     .padding(
@@ -139,8 +145,24 @@ fun NeonScreen(
                             .asPaddingValues()
                             .calculateBottomPadding()
                     ),
-                onPickColor = {},
-                onDismiss = { showColorPicker = false }
+                currentColor = selectedTextColor ?: selectedBgColor ?: 0L,
+                onPickColor = {
+                    when {
+                        selectedTextColor != null -> {
+                            selectedTextColor = it
+                            viewModel.changeTextColor(it)
+                        }
+
+                        selectedBgColor != null -> {
+                            selectedBgColor = it
+                            viewModel.changeBgColor(it)
+                        }
+                    }
+                },
+                onDismiss = {
+                    selectedTextColor = null
+                    selectedBgColor = null
+                }
             )
         }
     }

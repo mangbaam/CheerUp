@@ -1,16 +1,19 @@
 package com.mangbaam.cheerup.component
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -46,11 +49,12 @@ private val colorPreset = listOf(
 @Composable
 fun ColorPickerBottomSheet(
     modifier: Modifier = Modifier,
+    currentColor: Long,
     onPickColor: (Long) -> Unit,
     onDismiss: () -> Unit,
 ) {
     val pagerState = rememberPagerState(
-        initialPage = 1,
+        initialPage = 1, // TODO 현재 선택된 색상이 있는 페이지로 이동
         pageCount = { 5 },
     )
     ModalBottomSheet(
@@ -68,6 +72,7 @@ fun ColorPickerBottomSheet(
                     else -> ColorPickerPage(
                         modifier = Modifier.padding(horizontal = 20.dp),
                         colors = colorPreset[page],
+                        currentColor = currentColor,
                         onClickColor = onPickColor
                     )
                 }
@@ -87,6 +92,7 @@ fun ColorPickerBottomSheet(
 @Composable
 fun ColorPickerPage(
     modifier: Modifier = Modifier,
+    currentColor: Long,
     colors: List<Long>,
     onClickColor: (Long) -> Unit,
 ) {
@@ -94,15 +100,22 @@ fun ColorPickerPage(
         modifier = modifier,
         columns = GridCells.Fixed(4),
         contentPadding = PaddingValues(8.dp),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalArrangement = Arrangement.Center,
     ) {
         items(colors) { color ->
             Box(
-                modifier = Modifier.padding(8.dp),
+                modifier = Modifier.size(46.dp),
                 contentAlignment = Alignment.Center
             ) {
                 CircleColorButton(color = color, size = 40.dp, onClick = { onClickColor(color) })
+                if (color == currentColor) {
+                    Box(
+                        modifier = Modifier
+                            .size(42.dp)
+                            .border(3.dp, color = MaterialTheme.colorScheme.primary, shape = CircleShape)
+                    )
+                }
             }
         }
     }
