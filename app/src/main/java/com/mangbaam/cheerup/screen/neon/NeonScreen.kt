@@ -34,6 +34,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mangbaam.cheerup.component.CircleColorButton
 import com.mangbaam.cheerup.component.ColorPickerBottomSheet
+import com.mangbaam.cheerup.ui.theme.paddingHorizontal
+import com.mangbaam.cheerup.ui.theme.paddingVertical
 import com.mangbaam.cheerup.util.dpToPx
 
 const val NeonRoute = "neon"
@@ -66,7 +68,7 @@ fun NeonScreen(
                 OutlinedTextField(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 32.dp, start = 16.dp, end = 16.dp),
+                        .padding(horizontal = paddingHorizontal),
                     value = state.displayText,
                     placeholder = { Text(text = "응원 문구를 입력하세요", style = MaterialTheme.typography.bodyMedium) },
                     onValueChange = viewModel::changeDisplayText,
@@ -79,7 +81,9 @@ fun NeonScreen(
                     }
                 )
                 Row(
-                    modifier = Modifier.padding(top = 24.dp, start = 16.dp, end = 16.dp),
+                    modifier = Modifier
+                        .padding(top = paddingVertical)
+                        .padding(horizontal = paddingHorizontal),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(text = "속도")
@@ -94,7 +98,9 @@ fun NeonScreen(
                 }
 
                 Row(
-                    modifier = Modifier.padding(top = 24.dp, start = 16.dp, end = 16.dp),
+                    modifier = Modifier
+                        .padding(top = paddingVertical)
+                        .padding(horizontal = paddingHorizontal),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(text = "글자 크기")
@@ -109,7 +115,9 @@ fun NeonScreen(
                 }
 
                 Row(
-                    modifier = Modifier.padding(top = 24.dp, start = 16.dp, end = 16.dp),
+                    modifier = Modifier
+                        .padding(top = paddingVertical)
+                        .padding(horizontal = paddingHorizontal),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(text = "글자 굵기")
@@ -124,7 +132,9 @@ fun NeonScreen(
                 }
 
                 Row(
-                    modifier = Modifier.padding(top = 24.dp, start = 16.dp, end = 16.dp),
+                    modifier = Modifier
+                        .padding(top = paddingVertical)
+                        .padding(horizontal = paddingHorizontal),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Color.Red
@@ -137,7 +147,9 @@ fun NeonScreen(
                 }
 
                 Row(
-                    modifier = Modifier.padding(top = 24.dp, start = 16.dp, end = 16.dp),
+                    modifier = Modifier
+                        .padding(top = paddingVertical)
+                        .padding(horizontal = paddingHorizontal),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Color.Red

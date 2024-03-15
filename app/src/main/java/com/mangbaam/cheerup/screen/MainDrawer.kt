@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.mangbaam.cheerup.R
 import com.mangbaam.cheerup.screen.flash.FlashRoute
 import com.mangbaam.cheerup.screen.neon.NeonRoute
+import com.mangbaam.cheerup.ui.theme.paddingVertical
 import kotlinx.coroutines.launch
 
 @Composable
@@ -47,7 +48,7 @@ fun MainDrawer(
             style = MaterialTheme.typography.titleMedium,
         )
         HorizontalDivider(
-            modifier = Modifier.padding(bottom = 24.dp)
+            modifier = Modifier.padding(bottom = paddingVertical)
         )
         NavigationDrawerItem(
             icon = { Icon(imageVector = Icons.Outlined.Favorite, contentDescription = null) },
