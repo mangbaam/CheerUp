@@ -72,12 +72,15 @@ fun Home(
                 }
             }
         ) { innerPadding ->
-            NavHost(navController = navController, startDestination = NeonRoute) {
+            NavHost(
+                modifier = Modifier.padding(innerPadding),
+                navController = navController, startDestination = NeonRoute
+            ) {
                 composable(NeonRoute) {
-                    NeonScreen(Modifier.padding(innerPadding))
+                    NeonScreen()
                 }
                 composable(FlashRoute) {
-                    FlashScreen(Modifier.padding(innerPadding))
+                    FlashScreen()
                 }
             }
         }

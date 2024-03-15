@@ -48,16 +48,16 @@ private val colorPreset = listOf(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun ColorPickerBottomSheet(
-    modifier: Modifier = Modifier,
     currentColor: Long,
     onPickColor: (Long) -> Unit,
+    modifier: Modifier = Modifier,
     onDismiss: () -> Unit,
 ) {
     val pagerState = rememberPagerState(
         initialPage = colorPreset
             .indexOfFirst { it.contains(currentColor) }
             .coerceAtLeast(1),
-        pageCount = { 5 },
+        pageCount = { colorPreset.size },
     )
     ModalBottomSheet(
         modifier = modifier,

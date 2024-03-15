@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NeonViewModel @Inject constructor() : ViewModel() {
-    private val _state = MutableStateFlow(NeonState())
+    private val _state = MutableStateFlow(NeonState(displayText = "화이팅!!")) // TODO 마지막 문구 저장
     val state = _state.asStateFlow()
 
     fun changeDisplayText(text: String) {

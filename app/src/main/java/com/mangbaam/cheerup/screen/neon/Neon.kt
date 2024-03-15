@@ -49,9 +49,9 @@ fun Neon(
 
     Box(
         modifier = modifier
-            .background(bgColor)
             .fillMaxWidth()
             .aspectRatio(height / width.toFloat())
+            .background(bgColor)
             .onGloballyPositioned { coordinates ->
                 neonWidth = coordinates.size.width
             },
@@ -78,7 +78,7 @@ fun Neon(
                 fontWeight = FontWeight(fontWeight),
                 color = textColor,
             )
-            Spacer(modifier = Modifier.width(neonWidth.pxToDp() - textWidth.pxToDp() + 10.dp))
+            if (displayText.isNotEmpty()) Spacer(modifier = Modifier.width(neonWidth.pxToDp() - textWidth.pxToDp() + 10.dp))
         }
     }
 }
