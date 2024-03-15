@@ -58,6 +58,7 @@ fun NeonScreen(
                 fontWeight = state.fontWeight,
                 velocity = state.speed.dp,
                 textColor = Color(state.textColor),
+                bgColor = Color(state.bgColor),
             )
             Column(
                 modifier = Modifier.verticalScroll(scrollState),
@@ -132,6 +133,19 @@ fun NeonScreen(
                         modifier = Modifier.padding(start = 8.dp),
                         color = state.textColor,
                         onClick = { selectedTextColor = state.textColor },
+                    )
+                }
+
+                Row(
+                    modifier = Modifier.padding(top = 24.dp, start = 16.dp, end = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Color.Red
+                    Text(text = "배경 색상")
+                    CircleColorButton(
+                        modifier = Modifier.padding(start = 8.dp),
+                        color = state.bgColor,
+                        onClick = { selectedBgColor = state.bgColor },
                     )
                 }
             }

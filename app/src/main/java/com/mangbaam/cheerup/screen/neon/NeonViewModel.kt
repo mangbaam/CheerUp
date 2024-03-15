@@ -33,6 +33,6 @@ class NeonViewModel @Inject constructor() : ViewModel() {
     }
 
     fun changeBgColor(color: Long) {
-        // TODO 배경 색상 변경
+        _state.update { it.copy(bgColor = color) }
     }
 }

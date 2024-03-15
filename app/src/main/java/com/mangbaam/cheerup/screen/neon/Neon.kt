@@ -40,6 +40,7 @@ fun Neon(
     fontSize: TextUnit = 32.sp,
     fontWeight: Int = FontWeight.Normal.weight,
     textColor: Color = Color.Red,
+    bgColor: Color = Color.Black,
     velocity: Dp = DefaultMarqueeVelocity,
 ) {
     val (width, height) = screenSize
@@ -48,7 +49,7 @@ fun Neon(
 
     Box(
         modifier = modifier
-            .background(Color.Black)
+            .background(bgColor)
             .fillMaxWidth()
             .aspectRatio(height / width.toFloat())
             .onGloballyPositioned { coordinates ->

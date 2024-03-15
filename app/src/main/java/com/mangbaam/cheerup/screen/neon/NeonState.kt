@@ -6,4 +6,5 @@ data class NeonState(
     val fontWeight: Int = 400,
     val speed: Int = -30,
     val textColor: Long = 0xFFFF0000,
+    val bgColor: Long = 0xFF000000,
 )
