@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -20,7 +22,10 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.github.skydoves.colorpicker.compose.HsvColorPicker
+import com.github.skydoves.colorpicker.compose.rememberColorPickerController
 
 private val colorPreset = listOf(
     emptyList(),
@@ -39,8 +44,8 @@ private val colorPreset = listOf(
     listOf(
         0xFF706fd3, 0xFFf7f1e3, 0xFF34ace0, 0xFF33d9b2,
         0xFF474787, 0xFFaaa69d, 0xFF227093, 0xFF218c74,
-        0xFFff793f, 0xFFd1ccc0, 0xFFffb142, 0xFFffda79,
-        0xFFcd6133, 0xFF84817a, 0xFFffda79, 0xFFffda79,
+        0xFFff793f, 0xFFd1ccc0, 0xFFffb142, 0xFFffda00,
+        0xFFcd6133, 0xFF84817a, 0xFFff0a79, 0xFFffda39,
     ),
     emptyList()
 )
@@ -56,7 +61,7 @@ fun ColorPickerBottomSheet(
     val pagerState = rememberPagerState(
         initialPage = colorPreset
             .indexOfFirst { it.contains(currentColor) }
-            .coerceAtLeast(1),
+            .coerceAtLeast(0),
         pageCount = { colorPreset.size },
     )
     ModalBottomSheet(
@@ -68,9 +73,10 @@ fun ColorPickerBottomSheet(
         ) {
             HorizontalPager(
                 state = pagerState,
+                key = { it },
             ) { page ->
                 when {
-                    page == 0 -> Box(modifier = Modifier)
+                    page == 0 -> ColorPicker(currentColor = currentColor, onColorChanged = onPickColor)
                     else -> ColorPickerPage(
                         modifier = Modifier.padding(horizontal = 20.dp),
                         colors = colorPreset[page],
@@ -92,7 +98,23 @@ fun ColorPickerBottomSheet(
 }
 
 @Composable
-fun ColorPickerPage(
+private fun ColorPicker(currentColor: Long, onColorChanged: (Long) -> Unit) {
+    Box(
+        modifier = Modifier
+            .heightIn(max = 260.dp)
+            .padding(30.dp),
+    ) {
+        HsvColorPicker(
+            modifier = Modifier.wrapContentSize(),
+            initialColor = Color(currentColor),
+            controller = rememberColorPickerController(),
+            onColorChanged = { onColorChanged(it.hexCode.toLong(16)) }
+        )
+    }
+}
+
+@Composable
+private fun ColorPickerPage(
     modifier: Modifier = Modifier,
     currentColor: Long,
     colors: List<Long>,
@@ -105,7 +127,7 @@ fun ColorPickerPage(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalArrangement = Arrangement.Center,
     ) {
-        items(colors) { color ->
+        items(colors, key = { it }) { color ->
             Box(
                 modifier = Modifier.size(46.dp),
                 contentAlignment = Alignment.Center
