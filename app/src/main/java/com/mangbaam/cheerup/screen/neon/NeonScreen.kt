@@ -1,5 +1,7 @@
 package com.mangbaam.cheerup.screen.neon
 
+import android.content.pm.ActivityInfo
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -18,6 +20,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -25,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
@@ -33,6 +37,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mangbaam.cheerup.component.CircleColorButton
 import com.mangbaam.cheerup.component.ColorPickerBottomSheet
+import com.mangbaam.cheerup.extension.findActivity
+import com.mangbaam.cheerup.extension.setScreenOrientation
 import com.mangbaam.cheerup.ui.theme.paddingHorizontal
 import com.mangbaam.cheerup.ui.theme.paddingVertical
 import com.mangbaam.cheerup.util.dpToPx
@@ -44,14 +50,29 @@ fun NeonScreen(
     modifier: Modifier = Modifier,
     viewModel: NeonViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
+    val activity = context.findActivity()
     val scrollState = rememberScrollState()
     val state by viewModel.state.collectAsStateWithLifecycle()
+    var rotated by rememberSaveable { mutableStateOf(false) }
+
+    LaunchedEffect(rotated) {
+        activity ?: return@LaunchedEffect
+        context.setScreenOrientation(
+            if (rotated) {
+                ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE
+            } else {
+                ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT
+            }
+        )
+    }
 
     var selectedTextColor by rememberSaveable { mutableStateOf<Long?>(null) }
     var selectedBgColor by rememberSaveable { mutableStateOf<Long?>(null) }
 
     Column(modifier) {
         Neon(
+            modifier = Modifier.clickable { rotated = !rotated },
             displayText = state.displayText,
             fontSize = TextUnit(state.textSize.toFloat(), TextUnitType.Sp),
             fontWeight = state.fontWeight,

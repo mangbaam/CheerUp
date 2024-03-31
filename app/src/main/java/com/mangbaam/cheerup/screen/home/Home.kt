@@ -1,5 +1,6 @@
 package com.mangbaam.cheerup.screen.home
 
+import android.content.pm.ActivityInfo
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -17,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -24,6 +26,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.mangbaam.cheerup.R
+import com.mangbaam.cheerup.extension.findActivity
 import com.mangbaam.cheerup.screen.MainDrawer
 import com.mangbaam.cheerup.screen.flash.FlashRoute
 import com.mangbaam.cheerup.screen.flash.FlashScreen
@@ -37,6 +40,7 @@ const val HomeRoute = "home"
 fun Home(
     onClickSettings: () -> Unit,
 ) {
+    val context = LocalContext.current
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -65,9 +69,16 @@ fun Home(
     ) {
         Scaffold(
             topBar = {
-                HomeAppbar(currentDestination?.route ?: NeonRoute) {
-                    scope.launch {
-                        if (drawerState.isOpen) drawerState.close() else drawerState.open()
+                if (
+                    context.findActivity()?.requestedOrientation in listOf(
+                        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT,
+                        ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT,
+                    )
+                ) {
+                    HomeAppbar(currentDestination?.route ?: NeonRoute) {
+                        scope.launch {
+                            if (drawerState.isOpen) drawerState.close() else drawerState.open()
+                        }
                     }
                 }
             }
