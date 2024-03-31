@@ -17,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,6 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mangbaam.cheerup.component.CircleColorButton
 import com.mangbaam.cheerup.component.ColorPickerBottomSheet
+import com.mangbaam.cheerup.component.HomeAppbar
 import com.mangbaam.cheerup.extension.findActivity
 import com.mangbaam.cheerup.extension.setScreenOrientation
 import com.mangbaam.cheerup.ui.theme.paddingHorizontal
@@ -47,8 +49,8 @@ const val NeonRoute = "neon"
 
 @Composable
 fun NeonScreen(
-    modifier: Modifier = Modifier,
     viewModel: NeonViewModel = hiltViewModel(),
+    onClickNavigateIcon: () -> Unit,
 ) {
     val context = LocalContext.current
     val activity = context.findActivity()
@@ -70,114 +72,125 @@ fun NeonScreen(
     var selectedTextColor by rememberSaveable { mutableStateOf<Long?>(null) }
     var selectedBgColor by rememberSaveable { mutableStateOf<Long?>(null) }
 
-    Column(modifier) {
-        Neon(
-            modifier = Modifier.clickable { rotated = !rotated },
-            displayText = state.displayText,
-            fontSize = TextUnit(state.textSize.toFloat(), TextUnitType.Sp),
-            fontWeight = state.fontWeight,
-            velocity = state.speed.dp,
-            textColor = Color(state.textColor),
-            bgColor = Color(state.bgColor),
-        )
-        Column(
-            modifier = Modifier.verticalScroll(scrollState),
-        ) {
-            OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = paddingVertical)
-                    .padding(horizontal = paddingHorizontal),
-                value = state.displayText,
-                placeholder = { Text(text = "응원 문구를 입력하세요", style = MaterialTheme.typography.bodyMedium) },
-                onValueChange = viewModel::changeDisplayText,
-                trailingIcon = {
-                    if (state.displayText.isNotEmpty()) {
-                        IconButton(onClick = { viewModel.changeDisplayText("") }) {
-                            Icon(imageVector = Icons.Default.Clear, contentDescription = "글자 지우기")
+    Scaffold(
+        topBar = {
+            if (!rotated) {
+                HomeAppbar(
+                    currentMenu = NeonRoute,
+                    onClick = onClickNavigateIcon,
+                )
+            }
+        }
+    ) { innerPadding ->
+        Column(Modifier.padding(innerPadding)) {
+            Neon(
+                modifier = Modifier.clickable { rotated = !rotated },
+                displayText = state.displayText,
+                fontSize = TextUnit(state.textSize.toFloat(), TextUnitType.Sp),
+                fontWeight = state.fontWeight,
+                velocity = state.speed.dp,
+                textColor = Color(state.textColor),
+                bgColor = Color(state.bgColor),
+            )
+            Column(
+                modifier = Modifier.verticalScroll(scrollState),
+            ) {
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = paddingVertical)
+                        .padding(horizontal = paddingHorizontal),
+                    value = state.displayText,
+                    placeholder = { Text(text = "응원 문구를 입력하세요", style = MaterialTheme.typography.bodyMedium) },
+                    onValueChange = viewModel::changeDisplayText,
+                    trailingIcon = {
+                        if (state.displayText.isNotEmpty()) {
+                            IconButton(onClick = { viewModel.changeDisplayText("") }) {
+                                Icon(imageVector = Icons.Default.Clear, contentDescription = "글자 지우기")
+                            }
                         }
                     }
+                )
+                Row(
+                    modifier = Modifier
+                        .padding(top = paddingVertical)
+                        .padding(horizontal = paddingHorizontal),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(text = "방향")
+                    Slider(
+                        modifier = Modifier.padding(start = 8.dp),
+                        value = state.speed.toFloat(),
+                        valueRange = -200.dp.dpToPx()..200.dp.dpToPx(),
+                        onValueChange = {
+                            viewModel.changeSpeed(it.toInt())
+                        },
+                    )
                 }
-            )
-            Row(
-                modifier = Modifier
-                    .padding(top = paddingVertical)
-                    .padding(horizontal = paddingHorizontal),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(text = "방향")
-                Slider(
-                    modifier = Modifier.padding(start = 8.dp),
-                    value = state.speed.toFloat(),
-                    valueRange = -200.dp.dpToPx()..200.dp.dpToPx(),
-                    onValueChange = {
-                        viewModel.changeSpeed(it.toInt())
-                    },
-                )
-            }
 
-            Row(
-                modifier = Modifier
-                    .padding(top = paddingVertical)
-                    .padding(horizontal = paddingHorizontal),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(text = "글자 크기")
-                Slider(
-                    modifier = Modifier.padding(start = 8.dp),
-                    value = state.textSize.toFloat(),
-                    valueRange = 10f..300f,
-                    onValueChange = {
-                        viewModel.changeTextSize(it.toInt())
-                    },
-                )
-            }
+                Row(
+                    modifier = Modifier
+                        .padding(top = paddingVertical)
+                        .padding(horizontal = paddingHorizontal),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(text = "글자 크기")
+                    Slider(
+                        modifier = Modifier.padding(start = 8.dp),
+                        value = state.textSize.toFloat(),
+                        valueRange = 10f..300f,
+                        onValueChange = {
+                            viewModel.changeTextSize(it.toInt())
+                        },
+                    )
+                }
 
-            Row(
-                modifier = Modifier
-                    .padding(top = paddingVertical)
-                    .padding(horizontal = paddingHorizontal),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(text = "글자 굵기")
-                Slider(
-                    modifier = Modifier.padding(start = 8.dp),
-                    value = state.fontWeight.toFloat(),
-                    valueRange = FontWeight.Thin.weight.toFloat()..FontWeight.ExtraBold.weight.toFloat(),
-                    onValueChange = {
-                        viewModel.changeFontWeight(it.toInt())
-                    },
-                )
-            }
+                Row(
+                    modifier = Modifier
+                        .padding(top = paddingVertical)
+                        .padding(horizontal = paddingHorizontal),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(text = "글자 굵기")
+                    Slider(
+                        modifier = Modifier.padding(start = 8.dp),
+                        value = state.fontWeight.toFloat(),
+                        valueRange = FontWeight.Thin.weight.toFloat()..FontWeight.ExtraBold.weight.toFloat(),
+                        onValueChange = {
+                            viewModel.changeFontWeight(it.toInt())
+                        },
+                    )
+                }
 
-            Row(
-                modifier = Modifier
-                    .padding(top = paddingVertical)
-                    .padding(horizontal = paddingHorizontal),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Color.Red
-                Text(text = "글자 색상")
-                CircleColorButton(
-                    modifier = Modifier.padding(start = 8.dp),
-                    color = state.textColor,
-                    onClick = { selectedTextColor = state.textColor },
-                )
-            }
+                Row(
+                    modifier = Modifier
+                        .padding(top = paddingVertical)
+                        .padding(horizontal = paddingHorizontal),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Color.Red
+                    Text(text = "글자 색상")
+                    CircleColorButton(
+                        modifier = Modifier.padding(start = 8.dp),
+                        color = state.textColor,
+                        onClick = { selectedTextColor = state.textColor },
+                    )
+                }
 
-            Row(
-                modifier = Modifier
-                    .padding(top = paddingVertical)
-                    .padding(horizontal = paddingHorizontal),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Color.Red
-                Text(text = "배경 색상")
-                CircleColorButton(
-                    modifier = Modifier.padding(start = 8.dp),
-                    color = state.bgColor,
-                    onClick = { selectedBgColor = state.bgColor },
-                )
+                Row(
+                    modifier = Modifier
+                        .padding(top = paddingVertical)
+                        .padding(horizontal = paddingHorizontal),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Color.Red
+                    Text(text = "배경 색상")
+                    CircleColorButton(
+                        modifier = Modifier.padding(start = 8.dp),
+                        color = state.bgColor,
+                        onClick = { selectedBgColor = state.bgColor },
+                    )
+                }
             }
         }
     }

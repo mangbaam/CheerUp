@@ -43,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.mangbaam.cheerup.component.HomeAppbar
 import com.mangbaam.cheerup.screen.flash.FlashEffect.Blink
 import com.mangbaam.cheerup.screen.flash.FlashEffect.None
 import kotlinx.coroutines.launch
@@ -55,7 +56,7 @@ const val FlashRoute = "flash"
 
 @Composable
 fun FlashScreen(
-    modifier: Modifier = Modifier,
+    onClickNavigateIcon: () -> Unit,
 ) {
     val context = LocalContext.current
     val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
@@ -131,12 +132,18 @@ fun FlashScreen(
     }
 
     Scaffold(
+        topBar = {
+            HomeAppbar(
+                currentMenu = FlashRoute,
+                onClick = onClickNavigateIcon,
+            )
+        },
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
         }
     ) { innerPadding ->
         Box(
-            modifier = modifier
+            modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize(), contentAlignment = Alignment.Center
         ) {
