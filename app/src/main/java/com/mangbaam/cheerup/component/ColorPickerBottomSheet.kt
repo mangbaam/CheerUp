@@ -6,10 +6,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -76,9 +77,19 @@ fun ColorPickerBottomSheet(
                 key = { it },
             ) { page ->
                 when {
-                    page == 0 -> ColorPicker(currentColor = currentColor, onColorChanged = onPickColor)
+                    page == 0 -> ColorPicker(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.CenterHorizontally),
+                        currentColor = currentColor,
+                        onColorChanged = onPickColor,
+                    )
+
                     else -> ColorPickerPage(
-                        modifier = Modifier.padding(horizontal = 20.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.CenterHorizontally)
+                            .padding(horizontal = 20.dp),
                         colors = colorPreset[page],
                         currentColor = currentColor,
                         onClickColor = onPickColor
@@ -98,14 +109,20 @@ fun ColorPickerBottomSheet(
 }
 
 @Composable
-private fun ColorPicker(currentColor: Long, onColorChanged: (Long) -> Unit) {
+private fun ColorPicker(
+    modifier: Modifier = Modifier,
+    currentColor: Long,
+    onColorChanged: (Long) -> Unit,
+) {
     Box(
-        modifier = Modifier
-            .heightIn(max = 260.dp)
-            .padding(30.dp),
+        modifier = modifier,
+        contentAlignment = Alignment.Center,
     ) {
         HsvColorPicker(
-            modifier = Modifier.wrapContentSize(),
+            modifier = Modifier
+                .heightIn(max = 260.dp)
+                .widthIn(max = 260.dp)
+                .padding(30.dp),
             initialColor = Color(currentColor),
             controller = rememberColorPickerController(),
             onColorChanged = { onColorChanged(it.hexCode.toLong(16)) }
