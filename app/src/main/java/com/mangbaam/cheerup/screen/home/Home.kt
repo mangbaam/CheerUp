@@ -54,7 +54,7 @@ fun Home(
                 },
                 onClickSettings = onClickSettings,
             )
-        }
+        },
     ) {
         NavHost(
             navController = navController,
